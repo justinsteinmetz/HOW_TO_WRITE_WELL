@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Write Well — Write with clarity, precision, and purpose</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090f;
+  --surface: rgba(255,255,255,0.04);
+  --surface-hover: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
+  --border-bright: rgba(255,255,255,0.18);
+  --text: #e8eaf0;
+  --text-dim: #8892a4;
+  --text-dimmer: #4a5568;
+  --accent1: #7eb8a4; /* sage green — Sentence Builder */
+  --accent2: #7aaccc; /* steel blue — Paragraph Writer */
+  --accent3: #c8a96e; /* gold — Structured Writer */
+  --accent4: #a07ec8; /* violet — Academic Writer */
+  --accent5: #c87e8e; /* rose — Professional Stylist */
+  --glow1: rgba(126,184,164,0.15);
+  --glow2: rgba(122,172,204,0.15);
+  --glow3: rgba(200,169,110,0.15);
+  --glow4: rgba(160,126,200,0.15);
+  --glow5: rgba(200,126,142,0.15);
+  --sc: var(--accent1);
+  --sg: var(--glow1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+#canvas-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.1rem 2rem;
+  background: rgba(7,9,15,0.88); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-brand { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; color: var(--accent3); text-transform: uppercase; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-dim); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.25rem; cursor: pointer; }
+
+/* ── STAGE SWITCHER ── */
+.stage-switcher {
+  position: fixed; top: 56px; left: 0; right: 0; z-index: 90;
+  background: rgba(7,9,15,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  padding: 0 1.5rem;
+}
+.stage-switcher::-webkit-scrollbar { display: none; }
+.stage-btn {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.6rem 1.4rem; gap: 0.15rem;
+  border: none; background: transparent; cursor: pointer;
+  border-bottom: 2px solid transparent; color: var(--text-dimmer);
+  transition: all 0.22s; min-width: 120px;
+}
+.stage-btn:hover { color: var(--text-dim); }
+.stage-btn.active { color: var(--sc); border-bottom-color: var(--sc); }
+.stage-btn .sn { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; }
+.stage-btn .st { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; line-height: 1.1; font-style: italic; }
+.stage-btn .sg { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.08em; color: var(--text-dimmer); }
+
+.stage-btn[data-s="1"].active { color: var(--accent1); border-bottom-color: var(--accent1); }
+.stage-btn[data-s="2"].active { color: var(--accent2); border-bottom-color: var(--accent2); }
+.stage-btn[data-s="3"].active { color: var(--accent3); border-bottom-color: var(--accent3); }
+.stage-btn[data-s="4"].active { color: var(--accent4); border-bottom-color: var(--accent4); }
+.stage-btn[data-s="5"].active { color: var(--accent5); border-bottom-color: var(--accent5); }
+
+/* ── LAYOUT ── */
+.container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+section { padding: 5.5rem 0; position: relative; z-index: 1; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 9rem 0 4rem;
+}
+.hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent3); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.25rem; max-width: 16ch; opacity: 0; animation: fadeUp 0.9s ease 0.35s forwards; }
+.hero h1 em { font-style: italic; color: var(--accent3); }
+.hero-subtitle { font-size: 1.05rem; color: var(--text-dim); max-width: 50ch; margin-bottom: 2rem; font-weight: 300; opacity: 0; animation: fadeUp 0.9s ease 0.5s forwards; }
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.9s ease 0.65s forwards; margin-bottom: 2.5rem; }
+
+.principle-box {
+  opacity: 0; animation: fadeUp 0.9s ease 0.8s forwards;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--accent3);
+  border-radius: 6px; padding: 1.5rem 1.75rem; max-width: 560px;
+}
+.principle-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent3); margin-bottom: 0.65rem; }
+.principle-quote { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-style: italic; line-height: 1.6; color: var(--text); }
+
+/* ── BUTTONS ── */
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
+.btn-primary { background: var(--accent3); color: var(--bg); font-weight: 500; }
+.btn-primary:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border-bright); }
+.btn-ghost:hover { color: var(--text); border-color: var(--accent2); }
+
+/* ── SECTION HEADERS ── */
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent3); margin-bottom: 0.75rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+.section-intro { color: var(--text-dim); max-width: 58ch; font-size: 0.95rem; font-weight: 300; margin-bottom: 3rem; }
+
+/* ── ASCENT SPINE ── */
+.ascent-wrapper { display: grid; grid-template-columns: 60px 1fr; gap: 0 2rem; max-width: 900px; }
+.ascent-spine { display: flex; flex-direction: column; align-items: center; }
+.spine-line { width: 1px; flex: 1; min-height: 2rem; }
+.spine-line-1 { background: linear-gradient(to bottom, transparent, var(--accent1)); }
+.spine-line-2 { background: linear-gradient(to bottom, var(--accent1), var(--accent2)); }
+.spine-line-3 { background: linear-gradient(to bottom, var(--accent2), var(--accent3)); }
+.spine-line-4 { background: linear-gradient(to bottom, var(--accent3), var(--accent4)); }
+.spine-line-5 { background: linear-gradient(to bottom, var(--accent4), var(--accent5)); }
+.spine-line-end { background: linear-gradient(to bottom, var(--accent5), transparent); }
+
+.spine-node { width: 14px; height: 14px; border-radius: 50%; border: 2px solid; background: var(--bg); flex-shrink: 0; transition: all 0.3s; cursor: pointer; }
+.spine-node.lit { box-shadow: 0 0 12px; }
+.s1c .spine-node { border-color: var(--accent1); }
+.s1c .spine-node.lit { background: var(--accent1); box-shadow: 0 0 12px var(--accent1); }
+.s2c .spine-node { border-color: var(--accent2); }
+.s2c .spine-node.lit { background: var(--accent2); box-shadow: 0 0 12px var(--accent2); }
+.s3c .spine-node { border-color: var(--accent3); }
+.s3c .spine-node.lit { background: var(--accent3); box-shadow: 0 0 12px var(--accent3); }
+.s4c .spine-node { border-color: var(--accent4); }
+.s4c .spine-node.lit { background: var(--accent4); box-shadow: 0 0 12px var(--accent4); }
+.s5c .spine-node { border-color: var(--accent5); }
+.s5c .spine-node.lit { background: var(--accent5); box-shadow: 0 0 12px var(--accent5); }
+
+/* Stage-specific colour wrapper classes */
+.s1c { --sc: var(--accent1); --sg: var(--glow1); }
+.s2c { --sc: var(--accent2); --sg: var(--glow2); }
+.s3c { --sc: var(--accent3); --sg: var(--glow3); }
+.s4c { --sc: var(--accent4); --sg: var(--glow4); }
+.s5c { --sc: var(--accent5); --sg: var(--glow5); }
+
+/* ── STAGE CARDS ── */
+.stage-item { margin-bottom: 3rem; }
+.stage-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 2rem 2.25rem; cursor: pointer; transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.stage-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--sc); opacity: 0; transition: opacity 0.3s; }
+.stage-card:hover { background: var(--surface-hover); border-color: var(--border-bright); transform: translateX(4px); }
+.stage-card.active { border-color: var(--border-bright); transform: translateX(4px); box-shadow: 0 0 30px var(--sg); }
+.stage-card.active::before { opacity: 1; }
+.stage-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+.stage-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; color: var(--text-dimmer); text-transform: uppercase; }
+.stage-badge { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; padding: 0.2rem 0.65rem; border-radius: 2px; text-transform: uppercase; background: var(--sg); color: var(--sc); border: 1px solid var(--sc); }
+.stage-title-el { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--sc); }
+.stage-meta { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dimmer); margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+.stage-desc { color: var(--text-dim); font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.85rem; }
+.stage-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.skill-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; padding: 0.18rem 0.55rem; border-radius: 2px; border: 1px solid var(--border); color: var(--text-dimmer); text-transform: uppercase; }
+.stage-expand { display: none; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.stage-card.active .stage-expand { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; }
+.expand-item { background: rgba(255,255,255,0.03); border-radius: 4px; padding: 1rem; border: 1px solid var(--border); }
+.expand-item h4 { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dimmer); margin-bottom: 0.45rem; }
+.expand-item p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.5; }
+
+/* ── SKILL CARDS ── */
+.skills-section { background: rgba(255,255,255,0.012); }
+.skills-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2.5rem; }
+.tab-btn { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.45rem 1rem; border-radius: 3px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.tab-btn:hover { border-color: var(--accent3); color: var(--text); }
+.tab-btn.active { background: var(--accent3); color: var(--bg); border-color: var(--accent3); font-weight: 500; }
+
+.skill-panel { display: none; }
+.skill-panel.active { display: block; }
+.skill-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.25rem; }
+.skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; transition: all 0.2s; position: relative; overflow: hidden; }
+.skill-card:hover { border-color: var(--border-bright); background: var(--surface-hover); }
+.skill-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--sc-card, var(--accent3)); opacity: 0.5; }
+.skill-card-stage { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.skill-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.45rem; font-weight: 600; }
+.skill-card p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.6; }
+.skill-progression { display: flex; gap: 0.25rem; margin-top: 0.75rem; }
+.prog-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.prog-dot.on { background: var(--sc-card, var(--accent3)); }
+
+/* ── CHECKLIST ── */
+.checklist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.checklist-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.75rem; }
+.checklist-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 0.25rem; font-weight: 600; }
+.checklist-subtitle { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dimmer); margin-bottom: 1.25rem; }
+.checklist-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.checklist-item:last-of-type { border-bottom: none; }
+.check-box { width: 16px; height: 16px; border: 1px solid var(--border-bright); border-radius: 2px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 0.65rem; color: transparent; }
+.checklist-item:hover .check-box { border-color: var(--accent3); }
+.checklist-item.checked .check-box { background: var(--accent3); border-color: var(--accent3); color: var(--bg); }
+.checklist-item.checked .check-text { color: var(--text-dimmer); text-decoration: line-through; }
+.check-text { font-size: 0.87rem; color: var(--text-dim); line-height: 1.5; }
+.checklist-progress { margin-top: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+.progress-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent3); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+.progress-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dimmer); white-space: nowrap; }
+
+/* ── RUBRIC ── */
+.rubric-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 2rem; }
+.rubric-table th { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dimmer); text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-bright); background: rgba(255,255,255,0.02); }
+.rubric-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; line-height: 1.5; }
+.rubric-table tr:hover td { background: rgba(255,255,255,0.02); }
+.rubric-table td:first-child { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--text); font-weight: 600; white-space: nowrap; }
+.rubric-select { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.rubric-btn { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.85rem; border-radius: 2px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.rubric-btn.active { background: var(--accent2); color: var(--bg); border-color: var(--accent2); }
+.rubric-overflow { overflow-x: auto; }
+
+/* ── PHRASES ── */
+.phrases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
+.phrase-group { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; }
+.phrase-group h3 { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent3); margin-bottom: 1rem; }
+.phrase-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.phrase-item:last-child { border-bottom: none; }
+.phrase-text { font-size: 0.87rem; color: var(--text-dim); font-style: italic; line-height: 1.5; flex: 1; }
+.phrase-copy { font-size: 0.65rem; opacity: 0; color: var(--accent3); transition: opacity 0.2s; flex-shrink: 0; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
+.phrase-item:hover .phrase-copy { opacity: 1; }
+.phrase-item:hover .phrase-text { color: var(--text); }
+.phrase-item.copied .phrase-copy { color: var(--accent1); opacity: 1; }
+
+/* ── ACTIVITIES ── */
+.activities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem; }
+.activity-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; transition: all 0.25s; cursor: pointer; }
+.activity-card:hover { background: var(--surface-hover); border-color: var(--border-bright); transform: translateY(-2px); }
+.activity-type { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.35rem; }
+.activity-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.45rem; }
+.activity-card p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 0.85rem; }
+.activity-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.activity-tag { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid var(--border); color: var(--text-dimmer); text-transform: uppercase; }
+
+/* ── TIMER ── */
+.timer-layout { display: grid; grid-template-columns: auto 1fr; gap: 2.5rem; align-items: start; }
+.timer-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.75rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 230px; }
+.timer-arc { position: relative; }
+.arc-svg { transform: rotate(-90deg); }
+.arc-bg { fill: none; stroke: var(--border); stroke-width: 3; }
+.arc-prog { fill: none; stroke: var(--accent3); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.timer-display { font-family: 'DM Mono', monospace; font-size: 2.4rem; letter-spacing: 0.06em; color: var(--accent3); line-height: 1; }
+.timer-label-el { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dimmer); }
+.timer-presets { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+.t-preset { font-family: 'DM Mono', monospace; font-size: 0.63rem; padding: 0.3rem 0.65rem; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text-dimmer); cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; }
+.t-preset:hover { border-color: var(--border-bright); color: var(--text-dim); }
+.t-preset.sel { background: var(--accent3); border-color: var(--accent3); color: var(--bg); }
+.timer-btns { display: flex; gap: 0.5rem; }
+.t-btn { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 1.1rem; border-radius: 3px; border: none; cursor: pointer; transition: all 0.2s; }
+.t-start { background: var(--accent3); color: var(--bg); }
+.t-start:hover { filter: brightness(1.12); }
+.t-reset { background: transparent; border: 1px solid var(--border); color: var(--text-dimmer); }
+.t-reset:hover { border-color: var(--border-bright); color: var(--text-dim); }
+.timer-activities { flex: 1; }
+
+/* ── MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(7,9,15,0.92); z-index: 200; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(6px); }
+.modal-overlay.open { display: flex; }
+.modal { background: #0f1320; border: 1px solid var(--border-bright); border-radius: 8px; max-width: 580px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 2.25rem; position: relative; animation: slideUp 0.28s ease; }
+.modal-close { position: absolute; top: 1.1rem; right: 1.1rem; background: none; border: 1px solid var(--border); color: var(--text-dim); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.modal-close:hover { border-color: var(--accent5); color: var(--accent5); }
+.modal-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.4rem; }
+.modal h2 { font-family: 'Playfair Display', serif; font-size: 1.55rem; margin-bottom: 1.25rem; }
+.modal-body { color: var(--text-dim); font-size: 0.88rem; line-height: 1.7; }
+.modal-body p { margin-bottom: 0.8rem; }
+.modal-body p:last-child { margin: 0; }
+.modal-body ol, .modal-body ul { margin: 0.5rem 0 0.8rem 1.15rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.modal-body strong { color: var(--text); font-weight: 500; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 300; background: var(--accent1); color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; padding: 0.5rem 1rem; border-radius: 3px; opacity: 0; transform: translateY(6px); transition: all 0.22s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 2.5rem 0; text-align: center; position: relative; z-index: 1; }
+footer p { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-dimmer); }
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text-dim); margin-bottom: 0.4rem; font-style: italic; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(22px); transition: all 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .nav-links.open { display: flex; position: fixed; top: 56px; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(7,9,15,0.97); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+  .nav-links.open a { padding: 0.75rem 2rem; display: block; }
+  .timer-layout { grid-template-columns: 1fr; }
+  .timer-panel { width: 100%; }
+  .ascent-wrapper { grid-template-columns: 32px 1fr; gap: 0 1rem; }
+  .hero { padding-top: 10rem; }
+}
+@media (max-width: 580px) {
+  .skill-card-grid, .checklist-grid, .phrases-grid, .activities-grid { grid-template-columns: 1fr; }
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<nav>
+  <div class="nav-brand">How to Write Well</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#checklist">Checklist</a></li>
+    <li><a href="#rubric">Rubric</a></li>
+    <li><a href="#phrases">Phrases</a></li>
+    <li><a href="#practice">Practice</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
+
+<div class="stage-switcher" id="stageSwitcher">
+  <button class="stage-btn active" data-s="1" onclick="setStage(1)"><span class="sn">Stage 1</span><span class="st">Sentence Builder</span><span class="sg">Primary</span></button>
+  <button class="stage-btn" data-s="2" onclick="setStage(2)"><span class="sn">Stage 2</span><span class="st">Paragraph Writer</span><span class="sg">Upper Primary</span></button>
+  <button class="stage-btn" data-s="3" onclick="setStage(3)"><span class="sn">Stage 3</span><span class="st">Structured Writer</span><span class="sg">Lower Secondary</span></button>
+  <button class="stage-btn" data-s="4" onclick="setStage(4)"><span class="sn">Stage 4</span><span class="st">Academic Writer</span><span class="sg">Upper Secondary</span></button>
+  <button class="stage-btn" data-s="5" onclick="setStage(5)"><span class="sn">Stage 5</span><span class="st">Professional Stylist</span><span class="sg">Graduation+</span></button>
+</div>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow" id="heroEyebrow">Stage 1 · Sentence Builder · Primary</div>
+    <h1>How to Write <em>Well</em></h1>
+    <p class="hero-subtitle" id="heroSub">Write with clarity, precision, and purpose.</p>
+    <div class="hero-cta">
+      <a href="#framework" class="btn btn-primary">Explore the framework →</a>
+      <a href="#checklist" class="btn btn-ghost">Jump to checklist</a>
+    </div>
+    <div class="principle-box">
+      <div class="principle-label">Core principle</div>
+      <div class="principle-quote" id="heroPrinciple">"Every good sentence begins with one clear idea."</div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FRAMEWORK -->
+<section id="framework">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">The Framework</div>
+      <h2 class="section-title">Five stages of mastery</h2>
+      <p class="section-intro" id="frameworkIntro">The same disciplines are revisited each year at increasing sophistication. Click any stage to expand it.</p>
+    </div>
+    <div class="ascent-wrapper reveal">
+      <div class="ascent-spine">
+        <div class="spine-line spine-line-1" style="height:2rem"></div>
+        <div class="s1c"><div class="spine-node" id="sn0" onclick="toggleStageCard(0)"></div></div>
+        <div class="spine-line spine-line-2"></div>
+        <div class="s2c"><div class="spine-node" id="sn1" onclick="toggleStageCard(1)"></div></div>
+        <div class="spine-line spine-line-3"></div>
+        <div class="s3c"><div class="spine-node" id="sn2" onclick="toggleStageCard(2)"></div></div>
+        <div class="spine-line spine-line-4"></div>
+        <div class="s4c"><div class="spine-node" id="sn3" onclick="toggleStageCard(3)"></div></div>
+        <div class="spine-line spine-line-5"></div>
+        <div class="s5c"><div class="spine-node" id="sn4" onclick="toggleStageCard(4)"></div></div>
+        <div class="spine-line spine-line-end" style="height:2rem"></div>
+      </div>
+      <div id="stageCardList"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SKILLS -->
+<section id="skills" class="skills-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Core Disciplines</div>
+      <h2 class="section-title">Eight writing skills</h2>
+      <p class="section-intro">Each skill is practised at every stage. Select one to see how it develops across the five stages.</p>
+    </div>
+    <div class="skills-tabs reveal" id="skillTabs">
+      <button class="tab-btn active" onclick="switchSkill('ideas',this)">Ideas &amp; Planning</button>
+      <button class="tab-btn" onclick="switchSkill('sentence',this)">Sentence Craft</button>
+      <button class="tab-btn" onclick="switchSkill('paragraph',this)">Paragraph Structure</button>
+      <button class="tab-btn" onclick="switchSkill('argument',this)">Argument</button>
+      <button class="tab-btn" onclick="switchSkill('clarity',this)">Clarity</button>
+      <button class="tab-btn" onclick="switchSkill('style',this)">Style &amp; Voice</button>
+      <button class="tab-btn" onclick="switchSkill('editing',this)">Editing</button>
+      <button class="tab-btn" onclick="switchSkill('grammar',this)">Grammar</button>
+    </div>
+    <div id="skillPanels" class="reveal"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CHECKLIST -->
+<section id="checklist">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Before You Submit</div>
+      <h2 class="section-title">Writing checklist</h2>
+      <p class="section-intro" id="checklistIntro">Tick each item before you hand in your work.</p>
+    </div>
+    <div class="checklist-grid reveal" id="checklistGrid"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- RUBRIC -->
+<section id="rubric" style="background:rgba(255,255,255,0.01)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Assessment</div>
+      <h2 class="section-title">Editing rubric</h2>
+      <p class="section-intro">Use this to assess your own writing or give structured feedback to a peer.</p>
+    </div>
+    <div class="rubric-select reveal">
+      <button class="rubric-btn" onclick="selectRubric('s1',this)">Stage 1–2</button>
+      <button class="rubric-btn active" onclick="selectRubric('s3',this)">Stage 3</button>
+      <button class="rubric-btn" onclick="selectRubric('s5',this)">Stage 4–5</button>
+    </div>
+    <div class="rubric-overflow reveal">
+      <table class="rubric-table">
+        <thead><tr><th>Criterion</th><th>Beginning</th><th>Developing</th><th>Proficient</th><th>Excellent</th></tr></thead>
+        <tbody id="rubricBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PHRASES -->
+<section id="phrases">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Language</div>
+      <h2 class="section-title">Useful transition phrases</h2>
+      <p class="section-intro" id="phrasesIntro">Tap any phrase to copy it. Adapt it — don't reproduce it mechanically.</p>
+    </div>
+    <div class="phrases-grid reveal" id="phrasesGrid"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PRACTICE -->
+<section id="practice">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Practice</div>
+      <h2 class="section-title">Activities &amp; revision timer</h2>
+      <p class="section-intro">Use the timer with any activity. Click an activity card for full instructions.</p>
+    </div>
+    <div class="timer-layout reveal">
+      <div>
+        <div class="section-label" style="margin-bottom:0.75rem">Revision timer</div>
+        <div class="timer-panel">
+          <div class="timer-arc">
+            <svg class="arc-svg" width="100" height="100" viewBox="0 0 100 100">
+              <circle class="arc-bg" cx="50" cy="50" r="44"/>
+              <circle class="arc-prog" id="arcProg" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="0"/>
+            </svg>
+          </div>
+          <div class="timer-display" id="timerDisp">05:00</div>
+          <div class="timer-label-el" id="timerLbl">Ready</div>
+          <div class="timer-presets">
+            <button class="t-preset" onclick="setTimer(120,this)">2 min</button>
+            <button class="t-preset" onclick="setTimer(300,this)">5 min</button>
+            <button class="t-preset sel" onclick="setTimer(600,this)">10 min</button>
+            <button class="t-preset" onclick="setTimer(900,this)">15 min</button>
+            <button class="t-preset" onclick="setTimer(1800,this)">30 min</button>
+          </div>
+          <div class="timer-btns">
+            <button class="t-btn t-start" id="timerStartBtn" onclick="timerToggle()">Start</button>
+            <button class="t-btn t-reset" onclick="timerReset()">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="timer-activities">
+        <div class="section-label" style="margin-bottom:0.75rem">Activities</div>
+        <div class="activities-grid" id="activitiesGrid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-brand">How to Write Well</div>
+    <p>Write with clarity, precision, and purpose · One framework, five stages of mastery</p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modalInner"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+// ════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════
+
+const HERO_DATA = {
+  1: { eyebrow: 'Stage 1 · Sentence Builder · Primary', sub: 'Write with clarity, precision, and purpose.', principle: '"Every good sentence begins with one clear idea."' },
+  2: { eyebrow: 'Stage 2 · Paragraph Writer · Upper Primary', sub: 'Build paragraphs that hold together and move forward.', principle: '"A paragraph is a single idea, fully developed."' },
+  3: { eyebrow: 'Stage 3 · Structured Writer · Lower Secondary', sub: 'Organise your writing so your argument is impossible to miss.', principle: '"Structure is not a cage — it is the skeleton that lets writing stand."' },
+  4: { eyebrow: 'Stage 4 · Academic Writer · Upper Secondary', sub: 'Make an argument. Support it with evidence. Acknowledge complexity.', principle: '"Precision is not pedantry — it is respect for the reader\'s intelligence."' },
+  5: { eyebrow: 'Stage 5 · Professional Stylist · Graduation+', sub: 'At mastery level, technique becomes invisible. Only the effect remains.', principle: '"A writer who thinks clearly will write clearly. Begin there."' }
+};
+
+const FRAMEWORK = [
+  {
+    sClass:'s1c', num:'Stage 01', badge:'Primary', name:'Sentence Builder', meta:'Ages 6–10 · Emerging Writer',
+    tags:['Subject & verb','Capital letters','Full stops','Simple & compound sentences','Word choice'],
+    desc: { 1:'Build one clear sentence at a time. That is where every writer begins.',2:'Practise making your sentences complete and clear.',3:'The habits of the sentence builder — precision, completeness — never leave the mature writer.',4:'Every sophisticated argument rests on a succession of clear, complete sentences.',5:'Sentence-level mastery is the invisible foundation of all professional writing.' },
+    focus: { 1:'Every sentence has a subject and a verb. It begins with a capital and ends with a full stop.',2:'Every sentence is complete. Word choice is intentional.',3:'Sentence variety — short, long, simple, complex — creates rhythm and pace.',4:'Every sentence earns its place. No sentence is accidental.',5:'The sentence is the unit of thought. Control it absolutely.' },
+    success: { 1:'The reader understands exactly what you mean.',2:'The reader follows without re-reading.',3:'Each sentence contributes something the previous one did not.',4:'Every sentence advances the argument or deepens understanding.',5:'No sentence could be cut without losing something.' },
+    challenge: { 1:'Write five sentences about one object. Make each one different.',2:'Take a long, complicated sentence. Break it into two clearer ones.',3:'Write a paragraph using sentences of varying length. Read it aloud. Listen to the rhythm.',4:'Find a sentence in your essay that could be cut without loss. Cut it.',5:'Write a paragraph of exactly five sentences. Each must be necessary.' }
+  },
+  {
+    sClass:'s2c', num:'Stage 02', badge:'Upper Primary', name:'Paragraph Writer', meta:'Ages 9–12 · Developing Writer',
+    tags:['Topic sentence','Supporting detail','Concluding sentence','Linking ideas','Staying on topic'],
+    desc: { 1:'We are learning to group our sentences into paragraphs that stick together.',2:'A paragraph develops one idea. Every sentence belongs.',3:'The discipline of the paragraph — one idea, fully explored — is the foundation of all structured writing.',4:'Paragraph construction is where the architecture of an argument becomes visible.',5:'Professional writers know exactly when to begin and end a paragraph.' },
+    focus: { 1:'What is a topic sentence? What belongs in this paragraph?',2:'Start with a topic sentence. Finish with a clincher.',3:'Every paragraph makes a claim, supports it, and explains the significance.',4:'The paragraph is a unit of argument. Each one advances the essay\'s central claim.',5:'Paragraph structure is felt by the reader as rhythm, momentum, and clarity.' },
+    success: { 1:'The reader knows what each paragraph is about from its first sentence.',2:'No sentence in the paragraph belongs elsewhere.',3:'The paragraph could stand alone and be understood.',4:'Every paragraph tells us something and connects to the next.',5:'The reader moves through paragraphs without noticing the transitions.' },
+    challenge: { 1:'Write a paragraph about your favourite place. Start with a topic sentence.',2:'Find a paragraph you have written. Identify the topic sentence. Remove any sentences that don\'t belong.',3:'Write three paragraphs on the same topic. Each must make a different point.',4:'Write a paragraph that introduces an idea, develops it, and links it to the essay\'s argument.',5:'Read your essay paragraph by paragraph. Could any paragraph be reordered? If so, why?' }
+  },
+  {
+    sClass:'s3c', num:'Stage 03', badge:'Lower Secondary', name:'Structured Writer', meta:'Ages 12–15 · Confident Writer',
+    tags:['Essay structure','Introduction & conclusion','Thesis statement','Signposting','Planning'],
+    desc: { 1:'One day we will learn to organise a whole piece of writing into a shape that guides the reader.',2:'We are building towards writing that has a beginning, a middle that develops an argument, and an end.',3:'Structure your writing so the reader always knows where they are and where they are going.',4:'Structure is how an argument is made visible. It is not decoration — it is logic.',5:'At the professional level, structure is invisible. The reader feels only the movement of thought.' },
+    focus: { 1:'What does a piece of writing need at the beginning, middle, and end?',2:'Introduction, body paragraphs, conclusion. Each has a job.',3:'Write a thesis. Plan before you draft. Organise paragraphs to serve the argument.',4:'The introduction earns trust. The body builds the case. The conclusion goes beyond summary.',5:'Structure serves purpose. Every structural choice is a rhetorical choice.' },
+    success: { 1:'The reader knows where the writing is going.',2:'The writing has a clear beginning, middle, and end.',3:'The reader can follow the argument from start to finish without getting lost.',4:'The structure makes the argument feel inevitable.',5:'The structure is transparent: the reader experiences the ideas, not the scaffolding.' },
+    challenge: { 1:'Write a plan for a short piece of writing. Three sections. What goes in each?',2:'Write an introduction and a conclusion for a short essay. Check that they match.',3:'Write a thesis statement. Then plan three paragraphs that each support it.',4:'Exchange essay plans with a peer. Identify any gaps in their argument before drafting begins.',5:'Read a piece of professional writing. Map its structure. What was gained by that particular arrangement?' }
+  },
+  {
+    sClass:'s4c', num:'Stage 04', badge:'Upper Secondary', name:'Academic Writer', meta:'Ages 15–18 · Articulate Writer',
+    tags:['Evidence & analysis','Counterargument','Citation','Formal register','Complex syntax'],
+    desc: { 1:'We will learn to make arguments that are supported by evidence, not just opinion.',2:'We are developing writing that takes a position and supports it with evidence.',3:'Academic writing requires a thesis, evidence, analysis, and awareness of counter-arguments.',4:'Make a claim. Find the best evidence. Analyse — don\'t just quote. Acknowledge complexity.',5:'Stage 4 writing is where intellectual authority forms. Everything before it was preparation.' },
+    focus: { 1:'What is the difference between fact and opinion?',2:'How do you support what you say with evidence from a text?',3:'Every claim needs evidence. Every piece of evidence needs analysis.',4:'Analysis goes beyond quoting. It explains why the evidence means what you say it means.',5:'The best academic writing integrates evidence and argument so seamlessly the reader cannot separate them.' },
+    success: { 1:'The reader knows what you think and one reason why.',2:'The reader understands your claim and can identify the evidence.',3:'The argument is traceable: claim → evidence → analysis.',4:'The essay acknowledges its own limits and is stronger for doing so.',5:'The reader leaves convinced not by assertion but by the quality of the reasoning.' },
+    challenge: { 1:'Write one sentence saying what you think about something. Write one sentence giving a reason.',2:'Find a sentence in your writing that is opinion. Add a quotation or fact that supports it.',3:'Write a paragraph that makes a claim, uses a quotation, and analyses the quotation.',4:'Write a paragraph that presents a counter-argument and then refutes it.',5:'Revise an essay so that every claim is supported, every quotation is analysed, and the argument holds throughout.' }
+  },
+  {
+    sClass:'s5c', num:'Stage 05', badge:'Graduation+', name:'Professional Stylist', meta:'Age 18+ · Mastery Level',
+    tags:['Economy of language','Rhythm & register','Audience awareness','Editing at depth','Voice'],
+    desc: { 1:'One day, all of this will feel natural. Every great writer started at Stage 1.',2:'This is the goal — every skill practised at earlier stages is building towards this.',3:'All eight disciplines integrate into writing that serves its reader completely.',4:'Technique integrates into instinct. The writing reads as effortless — because the work has been done elsewhere.',5:'Preparation is invisible. Every choice — word, sentence, paragraph, structure — is made with full awareness of its effect.' },
+    focus: { 1:'Keep going.',2:'Every habit you are forming now is building towards this.',3:'Reading your own work as a stranger would. Ruthless self-editing.',4:'Economy. Precision. Rhythm. Register. Every word justifiable.',5:'The gap between what you intended to say and what the reader received.' },
+    success: { 1:'You wrote something. You will write something better next time.',2:'You can see how the skills connect to one another.',3:'Every sentence in the piece was chosen, not allowed to happen.',4:'The writing could not be improved by making it longer.',5:'A reader encounters your ideas, not your effort.' },
+    challenge: { 1:'Write something. Anything. Read it aloud.',2:'Review work from Stage 1 or 2. What has changed?',3:'Cut 20% from a piece of writing without losing any of its meaning.',4:'Rewrite a paragraph using half the words.',5:'Give a piece of your writing to a reader who will tell you honestly what they understood. Measure the gap.' }
+  }
+];
+
+const SKILLS = {
+  ideas: { label: 'Ideas & Planning', cards: [
+    { title: 'Finding ideas', bodies: ['Draw what you want to write about.','Brainstorm three possible topics. Choose the one you know most about.','Use a spider diagram to explore your topic before writing a word.','Identify the question your essay must answer before you plan anything else.','Define the problem your writing will solve. The plan follows from that.'] },
+    { title: 'Planning', bodies: ['Write the three things you want to say.','Bullet points before paragraphs. Order matters.','Write a plan. Number the points. Check the order before you start drafting.','A plan is a hypothesis. Test it against your argument as you draft.','Planning is thinking made visible. The better the plan, the cleaner the draft.'] },
+    { title: 'Staying focused', bodies: ['One idea at a time.','Cross out anything in your plan that doesn\'t belong.','Every paragraph must connect to your thesis.','Cut the material that belongs in a different essay.','"Kill your darlings" — remove anything that serves your cleverness rather than your argument.'] }
+  ]},
+  sentence: { label: 'Sentence Craft', cards: [
+    { title: 'Complete sentences', bodies: ['Every sentence has a subject and a verb.','Check: could this sentence stand alone? If not, revise it.','Vary your sentence openings — don\'t always begin with "I" or "The".','Sentence length is a rhythm tool. Short sentences punch. Longer ones develop.','Every sentence should do something its predecessor did not.'] },
+    { title: 'Word choice', bodies: ['Pick the word that means exactly what you want.','Replace "nice" and "good" with precise alternatives.','Prefer the specific to the general. Not "animal" — "sparrow."','Every word is a choice. Choose the most precise one available.','The best word is almost never the first one you thought of.'] },
+    { title: 'Sentence variety', bodies: ['Use full stops more than commas.','"And" and "but" can start sentences.','Mix simple sentences with complex ones. Too many of either deadens the pace.','Use the occasional very short sentence. For effect.','Syntax is rhetoric. Arrangement of words creates emphasis.'] }
+  ]},
+  paragraph: { label: 'Paragraph Structure', cards: [
+    { title: 'Topic sentences', bodies: ['The first sentence tells us what the paragraph is about.','Start every paragraph with a sentence that makes a claim.','Your topic sentence is a promise. Every sentence that follows must keep it.','The topic sentence should advance the essay\'s argument, not merely introduce a topic.','"Point, Evidence, Analysis, Link" — a reliable frame for academic paragraphs.'] },
+    { title: 'Development', bodies: ['Add one detail or example to each idea.','Every paragraph needs a beginning, a middle, and a direction.','Evidence supports claims. Analysis explains what the evidence means.','Never let a quotation explain itself. Your analysis does the work.','A well-developed paragraph leaves the reader with more than they had at the start.'] },
+    { title: 'Cohesion', bodies: ['Does each sentence follow from the last?','Use connecting words: "however," "therefore," "as a result."','The last sentence of a paragraph should prepare the reader for the next.','Every sentence is a link in a chain. Check the joins.','"Flow" is not magic — it is logical sequence and careful transitions.'] }
+  ]},
+  argument: { label: 'Organisation & Argument', cards: [
+    { title: 'Thesis', bodies: ['What do I think about this? Write it down.','Write a sentence that says exactly what your essay argues.','A thesis is a claim — not a topic, not a question, not a summary.','Your thesis should be arguable. If no one could disagree, it is not a thesis.','The strongest theses acknowledge complexity without surrendering their position.'] },
+    { title: 'Evidence & analysis', bodies: ['Find one fact or example that supports your idea.','Use quotations, data, and examples — then explain why they matter.','Evidence alone does not make an argument. Analysis does.','Every piece of evidence has been chosen. Justify your choice.','"So what?" — the question every paragraph of analysis must answer.'] },
+    { title: 'Counter-argument', bodies: ['Is there another way to look at this?','Name the strongest objection to your argument. Answer it.','"While it might be argued that…" — then explain why your position is stronger.','Acknowledging complexity is a sign of intellectual strength, not weakness.','The best argument anticipates its opposition and addresses it directly.'] }
+  ]},
+  clarity: { label: 'Clarity & Concision', cards: [
+    { title: 'Plain language', bodies: ['Use simple words unless a difficult word is exactly right.','Read your work aloud. If you stumble, the sentence needs rewriting.','Replace long phrases with shorter ones: "due to the fact that" → "because."','Clarity is not simplicity — it is precision. Say exactly what you mean.','Vague writing reveals vague thinking. Precision is the solution to both.'] },
+    { title: 'Cutting', bodies: ['Cross out one sentence from each paragraph you have written.','Remove every word that does nothing.','Cut any sentence that repeats what another sentence already said.','If a paragraph takes three sentences to say what one sentence could say, use one.','When in doubt, cut. Good writing is what remains after everything unnecessary has been removed.'] },
+    { title: 'Sentence economy', bodies: ['Avoid "there is" and "there are" to open sentences.','Replace passive constructions with active ones where possible.','Strong verbs carry more weight than noun-heavy phrases.','The nominalization trap: "make a decision" → "decide." Always prefer the verb.','Economy is not minimalism — it is ensuring that every word earns its place.'] }
+  ]},
+  style: { label: 'Style & Voice', cards: [
+    { title: 'Register', bodies: ['Write in full sentences. Avoid slang in formal work.','Match your language to your reader and your purpose.','Academic writing is formal, but not cold. Clarity and precision are its hallmarks.','Register is a set of choices — vocabulary, syntax, tone. Recognise that you are choosing.','"Formal" does not mean long-winded. Precision is always appropriate in any register.'] },
+    { title: 'Voice', bodies: ['Write in a way that sounds like you.','Your opinion can be expressed without "I think" — through what you choose to argue.','Style develops through reading widely and writing regularly.','Voice emerges when technique is internalised. You cannot manufacture it.','"Write to be understood" is the first instruction. "Write to be heard" comes later.'] },
+    { title: 'Rhythm', bodies: ['Read your work aloud. Does it sound good?','Vary sentence length to create pace and emphasis.','Repetition used deliberately creates power. Repetition used accidentally creates tedium.','The reader is always listening, even when they are reading. Write for the ear.','"Rhythm in prose is not poetry — but the ear is always present. Trust it."'] }
+  ]},
+  editing: { label: 'Editing & Revision', cards: [
+    { title: 'Reading as a stranger', bodies: ['Does this make sense to someone who wasn\'t there?','Read your work from the last paragraph to the first. What is actually there?','Editing is a separate act from writing. Leave time between them.','Read looking for one thing at a time: argument, then evidence, then clarity, then grammar.','"Revise" means to see again. It does not mean to tidy.'] },
+    { title: 'Structural revision', bodies: ['Does the introduction match the conclusion?','Could any paragraphs be reordered to make a stronger argument?','Does each paragraph connect logically to the next?','Read only your first and last sentences. Do they frame a coherent argument?','The hardest revision is structural — but it has the greatest effect.'] },
+    { title: 'Line editing', bodies: ['Read aloud. Mark anything that sounds wrong.','Replace every vague word with a precise one.','Remove redundant phrases and repeated ideas.','Every sentence must justify its existence.','"Kill your darlings" — remove anything that serves the writer rather than the reader.'] }
+  ]},
+  grammar: { label: 'Grammar & Punctuation', cards: [
+    { title: 'Punctuation', bodies: ['Full stop at the end of every sentence.','Commas separate items and clauses — not thoughts.','Learn the difference between a comma and a semicolon.','The colon introduces. The semicolon connects. They are not interchangeable.','Punctuation is not decoration — it is instruction to the reader about how to read.'] },
+    { title: 'Common errors', bodies: ['Check for missing full stops and capital letters.','Apostrophes: "it\'s" = "it is." "its" = belonging to it.','Avoid sentence fragments and run-on sentences.','"Their / there / they\'re" — practise until the choice is automatic.','Error-free writing is not necessarily good writing — but it is a precondition for being taken seriously.'] },
+    { title: 'Agreement & tense', bodies: ['Subject and verb must agree in number.','Keep tense consistent throughout a paragraph.','Academic essays about literature use the present tense.','Check that every pronoun refers clearly to a noun.','Grammar is not an obstacle to expression — it is the shared code that makes expression possible.'] }
+  ]}
+};
+
+const CHECKLISTS = {
+  1: [
+    { title: 'Before I Write', sub: 'Planning & preparation',
+      items: ['I know what I am writing about.','I have thought of at least three things to say.','I have decided how to start my first sentence.','I know who is going to read this.'] },
+    { title: 'My Sentences', sub: 'Sentence check',
+      items: ['Every sentence starts with a capital letter.','Every sentence ends with a full stop, question mark, or exclamation mark.','Every sentence has a subject and a verb.','I have read each sentence aloud.'] },
+    { title: 'My Words', sub: 'Word choice check',
+      items: ['I have tried to use interesting words, not just "nice" or "good."','I have not used the same word too many times in a row.','I have checked words I wasn\'t sure how to spell.'] }
+  ],
+  2: [
+    { title: 'Planning', sub: 'Paragraph planning',
+      items: ['I have written a plan before drafting.','Each paragraph has a clear topic.','I have decided on the order of my paragraphs.','My plan has an introduction and a conclusion.'] },
+    { title: 'Paragraphs', sub: 'Paragraph check',
+      items: ['Each paragraph has a topic sentence.','Every sentence in the paragraph belongs there.','I have used connecting words to link ideas.','Each paragraph ends in a way that prepares the next.'] },
+    { title: 'Editing', sub: 'After writing',
+      items: ['I have read the whole piece aloud.','I have checked for full stops and capital letters.','I have removed any repeated ideas.','I have checked that my ending matches my beginning.'] }
+  ],
+  3: [
+    { title: 'Before Drafting', sub: 'Planning & thesis',
+      items: ['I have written a clear thesis statement.','My plan has at least three distinct points, each supporting the thesis.','I know what each paragraph will argue.','I have checked that my points are in the most effective order.'] },
+    { title: 'While Drafting', sub: 'Structure checks',
+      items: ['My introduction makes a claim, not just a statement of topic.','Every paragraph begins with a topic sentence.','I have used signposting language to guide the reader.','My conclusion does more than repeat the introduction.'] },
+    { title: 'After Drafting', sub: 'Revision & editing',
+      items: ['I have read the essay as if I did not write it.','I have cut at least one sentence that wasn\'t earning its place.','I have checked all punctuation, especially apostrophes and commas.','I have read the first and last sentence of every paragraph.'] }
+  ],
+  4: [
+    { title: 'Argument', sub: 'Before drafting',
+      items: ['I have a clear, arguable thesis.','Every point in my plan supports the thesis.','I have identified the strongest counter-argument.','I have planned where and how to address it.'] },
+    { title: 'Evidence & Analysis', sub: 'During drafting',
+      items: ['Every claim is supported by evidence.','Every piece of evidence is followed by analysis.','I have not allowed a quotation to explain itself.','I have cited sources consistently and accurately.'] },
+    { title: 'Clarity & Economy', sub: 'Revision stage',
+      items: ['Every sentence could not be cut without losing meaning.','I have replaced vague language with precise language.','My argument is visible throughout — not just in the introduction.','I have removed any sentences that repeat what another sentence already says.'] }
+  ],
+  5: [
+    { title: 'Argument & Structure', sub: 'Higher-order revision',
+      items: ['The thesis is clear, arguable, and sustained throughout.','The structure is the most effective for this particular argument.','The counter-argument is acknowledged and addressed, not avoided.','The conclusion extends the argument rather than summarising it.'] },
+    { title: 'Style & Economy', sub: 'Line editing',
+      items: ['Every word has been chosen, not allowed to happen.','No sentence could be cut without losing something.','Rhythm and sentence variety are deliberate, not accidental.','The register is consistent and appropriate throughout.'] },
+    { title: 'The Reader\'s Experience', sub: 'Final read',
+      items: ['I have read the whole piece aloud at normal reading speed.','I have asked: what would a hostile reader object to? I have addressed it.','The gap between what I intended and what a reader receives is as small as I can make it.','I would be willing to be judged by this writing.'] }
+  ]
+};
+
+const RUBRICS = {
+  s1: [
+    ['Sentences','Incomplete or unclear sentences throughout.','Most sentences complete; some errors in punctuation.','Sentences are complete, consistently punctuated, and varied.','Sentences are purposeful, varied in structure, and consistently accurate.'],
+    ['Word choice','Very limited vocabulary; frequent vague language.','Some attempts at precise or interesting vocabulary.','Vocabulary is appropriate and sometimes precise or vivid.','Vocabulary is precise, varied, and always chosen for effect.'],
+    ['Ideas','Writing is unclear or off-topic.','One or two ideas are present; more development needed.','Ideas are clear and relevant; some organisation visible.','Ideas are developed clearly and ordered with purpose.'],
+    ['Conventions','Frequent errors in capital letters and full stops.','Some errors; shows awareness of conventions.','Generally accurate punctuation and capitalisation.','Accurate and confident use of sentence conventions throughout.']
+  ],
+  s3: [
+    ['Thesis & argument','No clear thesis or central argument.','A thesis is present but not consistently supported.','Clear thesis; paragraphs mostly support the argument.','Argument is clear, sustained, and well-developed throughout.'],
+    ['Structure','No clear introduction, body, or conclusion.','Structure is present but paragraphs are uneven.','Clear structure; most paragraphs have topic sentences.','Structure is purposeful; each paragraph advances the essay.'],
+    ['Evidence & analysis','No evidence or quotation used.','Evidence used but not analysed.','Evidence is selected and followed by some analysis.','Evidence is well-chosen and thoroughly analysed.'],
+    ['Clarity & style','Writing is difficult to follow; language imprecise.','Some clarity; some vague or repetitive language.','Writing is generally clear; register is appropriate.','Writing is clear, precise, and uses appropriate academic register throughout.'],
+    ['Grammar & punctuation','Frequent errors that obscure meaning.','Some errors; few affect meaning.','Generally accurate; minor errors only.','Accurate and consistent throughout.']
+  ],
+  s5: [
+    ['Argument','Argument is absent, incoherent, or contradictory.','Argument is present but not sustained or nuanced.','Argument is clear, consistent, and considers counter-evidence.','Argument is sophisticated, nuanced, and intellectually rigorous.'],
+    ['Evidence & analysis','Claims are unsupported or evidence is misread.','Evidence is present; analysis is superficial.','Evidence is relevant and analysed with clarity.','Evidence is judiciously selected and deeply integrated with argument.'],
+    ['Structure','Structure is arbitrary or unclear.','Structure exists but does not serve the argument optimally.','Structure is clear and appropriate to purpose.','Structure is the most effective possible for this argument; feels inevitable.'],
+    ['Style & economy','Writing is verbose, imprecise, or tonally inconsistent.','Writing is generally clear but uneven in style.','Writing is clear, concise, and register-consistent.','Writing is precise, rhythmically varied, and stylistically assured throughout.'],
+    ['Editing quality','Numerous errors; signs of no revision.','Some revision evident; errors remain.','Well-edited; minor slips only.','Writing has been edited to the level where every word justifies its presence.']
+  ]
+};
+
+const PHRASES = {
+  1: [
+    { title: 'Starting sentences differently', phrases: ['After that, …', 'Next, …', 'Because of this, …', 'For example, …', 'This shows that …'] },
+    { title: 'Giving reasons', phrases: ['This is because …', 'One reason is …', 'For instance, …', 'This means that …'] },
+    { title: 'Finishing ideas', phrases: ['In the end, …', 'So, …', 'That is why …', 'This is important because …'] }
+  ],
+  2: [
+    { title: 'Beginning paragraphs', phrases: ['One key point is …', 'Another idea to consider is …', 'A further example of this is …', 'It is also worth noting that …'] },
+    { title: 'Adding evidence', phrases: ['For example, …', 'This is supported by …', 'We can see this when …', 'This is shown by the fact that …'] },
+    { title: 'Moving between ideas', phrases: ['However, …', 'On the other hand, …', 'In addition, …', 'Despite this, …', 'As a result, …'] }
+  ],
+  3: [
+    { title: 'Introducing the argument', phrases: ['This essay will argue that …', 'It is evident that …', 'A central question is whether …', 'The evidence suggests that …'] },
+    { title: 'Developing points', phrases: ['This is further demonstrated by …', 'A significant implication of this is …', 'Building on this, …', 'It is therefore clear that …'] },
+    { title: 'Counter-argument', phrases: ['While it might be argued that …', 'Some would contend that … however, …', 'Although … it is important to recognise that …', 'This view overlooks the fact that …'] },
+    { title: 'Concluding', phrases: ['In conclusion, …', 'Taken together, these points suggest …', 'What emerges from this analysis is …', 'Ultimately, …'] }
+  ],
+  4: [
+    { title: 'Framing the argument', phrases: ['This essay contends that …', 'The central argument of this essay is that …', 'There are strong grounds for arguing that …', 'The evidence compels the conclusion that …'] },
+    { title: 'Integrating evidence', phrases: ['As X demonstrates, …', 'X\'s claim that "…" supports the view that …', 'The data suggest that …', 'This is corroborated by …'] },
+    { title: 'Acknowledging complexity', phrases: ['It must be acknowledged that …', 'A competing perspective holds that …', 'This position is not without its difficulties.', 'The strongest objection to this view is …'] },
+    { title: 'Concluding with precision', phrases: ['The foregoing analysis suggests that …', 'What the evidence ultimately demonstrates is …', 'The significance of this argument extends beyond …', 'A fuller account would require …'] }
+  ],
+  5: [
+    { title: 'Precise assertion', phrases: ['The evidence points overwhelmingly to …', 'There is a compelling case for …', 'It is not simply that … but that …', 'The question is not whether … but how …'] },
+    { title: 'Positioning within a debate', phrases: ['Against this orthodoxy, …', 'The standard account overlooks …', 'While … has been widely assumed, the evidence for … is …', 'The problem with this framing is …'] },
+    { title: 'Analytical precision', phrases: ['To put the matter more precisely, …', 'What this reveals is not … but …', 'The distinction that matters here is between …', 'The force of this argument depends on …'] },
+    { title: 'Closing with authority', phrases: ['The conclusion is not a summary but a destination.', 'What we are left with is …', 'The implication for … is significant: …', 'This is not the end of the argument — it is where it becomes interesting.'] }
+  ]
+};
+
+const ACTIVITIES = {
+  1: [
+    { type:'Sentence practice', title:'One Object, Five Sentences', body:'Write five different sentences about a single object. Make every sentence different — in length, in openings, in what it tells us.', tags:['sentences','variety'], modal:'<p><strong>The task:</strong> Choose one object you can see right now.</p><ol><li>Write a sentence saying what it is.</li><li>Write a sentence saying what it looks like.</li><li>Write a sentence saying what it feels like.</li><li>Write a sentence saying what it is used for.</li><li>Write a sentence saying what you think about it.</li></ol><p>Read all five aloud. Do any sound the same? Change the ones that do.</p>' },
+    { type:'Word choice', title:'Replace the Weak Word', body:'Take a piece of writing you have already done. Circle every "nice," "good," "big," or "got." Replace each one with a more precise word.', tags:['vocabulary','editing'], modal:'<p>Open a piece of your own writing.</p><ol><li>Circle every instance of: <strong>nice, good, bad, big, small, got, went, very</strong>.</li><li>For each one, write three alternatives.</li><li>Choose the most precise.</li><li>Read the improved version aloud.</li></ol><p>The goal is not to use fancy words — it is to use <em>exact</em> ones.</p>' },
+    { type:'Reading aloud', title:'Read It Back', body:'Read your writing aloud, word by word. Mark anywhere you stumble. Those are the places to rewrite.', tags:['editing','reading aloud'], modal:'<p>Reading your own work aloud is the most reliable editing technique available.</p><ol><li>Read the piece at normal reading speed — do not rush.</li><li>Every time you stumble, trip, or want to speed up: put a mark.</li><li>Go back to the marked sentences. Rewrite them until they are smooth.</li><li>Read the whole piece again.</li></ol><p><strong>If your mouth cannot say it easily, the reader\'s mind cannot follow it easily.</strong></p>' }
+  ],
+  2: [
+    { type:'Paragraph building', title:'Point, Example, Explain', body:'Write a paragraph using this structure: make a point, give an example, explain why the example supports the point.', tags:['paragraphs','structure'], modal:'<p>This is the foundation of all academic paragraphs.</p><ol><li><strong>Point:</strong> Write a sentence that makes a claim.</li><li><strong>Example:</strong> Write a sentence that gives a specific example or detail.</li><li><strong>Explain:</strong> Write a sentence (or two) that explains why the example supports the point.</li></ol><p>Read the paragraph aloud. Does the explanation connect the example back to the point? If not, revise the last sentence until it does.</p>' },
+    { type:'Editing', title:'Cut One Sentence', body:'Find a paragraph you have written. Remove one sentence. If the paragraph is still clear, the sentence was unnecessary.', tags:['editing','concision'], modal:'<p>The best editing test: removal.</p><ol><li>Take any paragraph of your own writing.</li><li>Read it once.</li><li>Choose the sentence you would most want to keep. Now choose the one you would most want to cut.</li><li>Cut the weakest sentence.</li><li>Read the paragraph again. Is it clearer? Shorter? Does it lose anything?</li></ol><p>If the paragraph survives the cut, the sentence was unnecessary. Do this with every paragraph.</p>' },
+    { type:'Linking ideas', title:'Connect the Paragraphs', body:'Take two separate paragraphs and write a transition sentence that connects the last line of one to the first line of the other.', tags:['transitions','flow'], modal:'<p>The gap between paragraphs is where readers often get lost.</p><ol><li>Take two paragraphs you have written (they can be from different pieces).</li><li>Read the last sentence of Paragraph A.</li><li>Read the first sentence of Paragraph B.</li><li>Write a transition sentence that could appear at the end of A or the beginning of B to link them.</li><li>Insert it and read the passage. Is the join smoother?</li></ol>' }
+  ],
+  3: [
+    { type:'Argument', title:'Write the Thesis First', body:'Before writing any essay, write your thesis statement in a single sentence. Everything in the essay must support that sentence.', tags:['thesis','planning'], modal:'<p>A thesis is the most important sentence in an essay. Write it before you write anything else.</p><p><strong>A good thesis:</strong></p><ul><li>Makes a specific claim (not a statement of topic)</li><li>Is arguable (reasonable people could disagree)</li><li>Can be supported in 3–5 paragraphs</li></ul><p><strong>Exercise:</strong> Take an essay topic. Write five possible thesis statements. Choose the most specific and most arguable. Build your plan from that sentence.</p>' },
+    { type:'Structure', title:'Backwards Read', body:'Read your essay from the last paragraph to the first. This reveals whether each paragraph stands on its own — and whether the order is truly necessary.', tags:['structure','revision'], modal:'<p>Reading backwards is one of the most effective structural editing techniques.</p><ol><li>Start with your conclusion. Read it. Is it self-contained?</li><li>Move to the second-to-last paragraph. Does it make its point?</li><li>Continue through to the introduction.</li><li>Ask: <strong>are these paragraphs in the only possible order, or could they be rearranged?</strong></li></ol><p>If they could be rearranged without loss, your transitions are not doing enough work. Revise the connections between paragraphs until the order feels inevitable.</p>' },
+    { type:'Clarity', title:'Translate into Plain Language', body:'Take the most complex sentence in your essay. Rewrite it in the plainest language you can. Then decide which version is clearer.', tags:['clarity','editing'], modal:'<p>Complex writing often hides simple ideas — and sometimes hides confusion.</p><ol><li>Find the sentence in your writing that is hardest to understand.</li><li>Explain it aloud in simple English, as if to someone who has not read your essay.</li><li>Write down what you just said.</li><li>Compare the two versions. Which is clearer?</li><li>If the plain version is clearer: use it. If the original is more precise: revise it until it is as clear as the plain version.</li></ol>' }
+  ],
+  4: [
+    { type:'Argument', title:'Argue the Opposite', body:'Take your essay\'s central argument. Write the strongest possible case for the opposite position. Then revise your original essay to address it.', tags:['counter-argument','argument'], modal:'<p>The best way to test an argument is to attack it yourself.</p><ol><li>Write down your essay\'s thesis.</li><li>Write the strongest possible counter-argument — the objection that would most threaten your position.</li><li>Write a paragraph in your essay that acknowledges this counter-argument and explains why your thesis still holds.</li></ol><p><strong>Note:</strong> Acknowledging a strong counter-argument does not weaken your essay. It demonstrates intellectual honesty and strengthens your credibility as a thinker.</p>' },
+    { type:'Evidence', title:'Analyse, Don\'t Just Quote', body:'Find every quotation in your essay. Check that each one is followed by at least two sentences of analysis. If not, add them.', tags:['evidence','analysis'], modal:'<p>A quotation is evidence — it cannot speak for itself.</p><p>For each quotation in your essay, apply this test:</p><ol><li><strong>What</strong> does this quotation literally say?</li><li><strong>Why</strong> does it support my argument?</li><li><strong>So what?</strong> What does this mean for my essay\'s broader claim?</li></ol><p>If your paragraph does not answer all three questions, your analysis is incomplete. Return to the paragraph and extend it until it does.</p>' },
+    { type:'Economy', title:'Cut 20%', body:'Take any piece of writing of 500+ words. Set a target of cutting 20% of the words without losing any of the meaning.', tags:['concision','editing'], modal:'<p>This is one of the most demanding editing exercises — and one of the most instructive.</p><ol><li>Count the words in your piece.</li><li>Calculate 20% of that number. That is your target number of words to remove.</li><li>Begin cutting: redundant phrases, repeated ideas, unnecessary qualifiers, weak sentences.</li><li>When you reach the target, read the piece aloud. Is anything lost?</li></ol><p>You will almost always find that the shorter version is stronger. The discipline of cutting forces every remaining word to justify its presence.</p>' }
+  ],
+  5: [
+    { type:'Self-editing', title:'The Gap Analysis', body:'After finishing a piece of writing, write three sentences immediately on the gap between what you intended to say and what a reader would actually receive.', tags:['revision','self-reflection'], modal:'<p>This is the advanced writer\'s most important habit.</p><p>Immediately after submitting or finishing a piece, write the answers to these three questions — without re-reading the work:</p><ol><li>What did I intend this piece to achieve?</li><li>What would a critical reader find missing or unconvincing?</li><li>What would I change if I could revise it once more?</li></ol><p>Over time, this discipline closes the gap between intention and effect. The writer who cannot articulate this gap is not yet revising — they are only proofreading.</p>' },
+    { type:'Style', title:'The Rewrite in Half', body:'Take a paragraph of at least 100 words. Rewrite it in 50 words or fewer. Preserve every important idea.', tags:['economy','style'], modal:'<p>The discipline of compression reveals which ideas are truly necessary.</p><ol><li>Choose a paragraph of 100+ words from your own writing.</li><li>Identify the two or three most important ideas in it.</li><li>Write a new version that contains all of those ideas in 50 words or fewer.</li><li>Read both versions aloud.</li><li>Ask: which version respects the reader\'s time more?</li></ol><p>The purpose is not to produce a final version at 50 words — it is to discover what the paragraph is actually doing, and whether it is doing it efficiently.</p>' },
+    { type:'Voice', title:'Read a Master, Then Write', body:'Read one page of a writer whose prose you admire. Close the book. Write a paragraph in your own voice on any subject. Compare the two.', tags:['voice','imitation'], modal:'<p>Imitation is the oldest method of developing style — but imitation without awareness produces pastiche.</p><ol><li>Choose one page of prose from a writer you admire.</li><li>Read it carefully and slowly.</li><li>Close the book. Wait five minutes.</li><li>Write a paragraph on any subject — in your own voice.</li><li>Compare the two pages. What has the master done that you haven\'t? What have you done that they haven\'t?</li></ol><p>You are not trying to sound like them. You are trying to learn from how they make decisions.</p>' }
+  ]
+};
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let currentStage = 1;
+const checkState = {};
+let activeCardIdx = -1;
+
+// ════════════════════════════════════════════
+// STAGE SWITCHER
+// ════════════════════════════════════════════
+function setStage(s) {
+  currentStage = s;
+  // update switcher buttons
+  document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.stage-btn[data-s="${s}"]`).classList.add('active');
+  // hero
+  const h = HERO_DATA[s];
+  document.getElementById('heroEyebrow').textContent = h.eyebrow;
+  document.getElementById('heroSub').textContent = h.sub;
+  document.getElementById('heroPrinciple').textContent = h.principle;
+  // re-render dynamic sections
+  renderActiveSkillPanel();
+  renderChecklists();
+  renderPhrases();
+  renderActivities();
+}
+
+// ════════════════════════════════════════════
+// FRAMEWORK CARDS
+// ════════════════════════════════════════════
+function buildFramework() {
+  const list = document.getElementById('stageCardList');
+  list.innerHTML = '';
+  FRAMEWORK.forEach((st, i) => {
+    const item = document.createElement('div');
+    item.className = 'stage-item';
+    item.innerHTML = `
+      <div class="stage-card ${st.sClass}" id="sc${i}" onclick="toggleStageCard(${i})">
+        <div class="stage-header">
+          <div class="stage-num">${st.num}</div>
+          <div class="stage-badge">${st.badge}</div>
+        </div>
+        <div class="stage-title-el">${st.name}</div>
+        <div class="stage-meta">${st.meta}</div>
+        <div class="stage-desc" id="sd${i}">${st.desc[1]}</div>
+        <div class="stage-tags">${st.tags.map(t => `<span class="skill-tag">${t}</span>`).join('')}</div>
+        <div class="stage-expand">
+          <div class="expand-item"><h4>Focus</h4><p id="ef${i}">${st.focus[1]}</p></div>
+          <div class="expand-item"><h4>Success looks like</h4><p id="es${i}">${st.success[1]}</p></div>
+          <div class="expand-item"><h4>Challenge</h4><p id="ec${i}">${st.challenge[1]}</p></div>
+        </div>
+      </div>`;
+    list.appendChild(item);
+  });
+  // also update spine nodes
+  document.querySelectorAll('.spine-node').forEach((n, i) => {
+    n.onclick = () => toggleStageCard(i);
+  });
+}
+
+function toggleStageCard(idx) {
+  const wasActive = activeCardIdx === idx;
+  // deactivate all
+  FRAMEWORK.forEach((_, i) => {
+    document.getElementById(`sc${i}`).classList.remove('active');
+    document.getElementById(`sn${i}`) && document.getElementById(`sn${i}`).classList.remove('lit');
+  });
+  if (!wasActive) {
+    activeCardIdx = idx;
+    const card = document.getElementById(`sc${idx}`);
+    card.classList.add('active');
+    document.getElementById(`sn${idx}`).classList.add('lit');
+    // update text for current stage
+    const st = FRAMEWORK[idx];
+    const s = currentStage;
+    document.getElementById(`sd${idx}`).textContent = st.desc[s];
+    document.getElementById(`ef${idx}`).textContent = st.focus[s];
+    document.getElementById(`es${idx}`).textContent = st.success[s];
+    document.getElementById(`ec${idx}`).textContent = st.challenge[s];
+  } else {
+    activeCardIdx = -1;
+  }
+}
+
+// ════════════════════════════════════════════
+// SKILLS
+// ════════════════════════════════════════════
+const STAGE_COLOURS_CSS = ['var(--accent1)','var(--accent2)','var(--accent3)','var(--accent4)','var(--accent5)'];
+let activeSkillKey = 'ideas';
+
+function renderSkillPanel(key) {
+  activeSkillKey = key;
+  const skill = SKILLS[key];
+  let html = '<div class="skill-card-grid">';
+  skill.cards.forEach(card => {
+    html += '<div class="skill-card">';
+    html += '<div class="skill-progression">';
+    card.bodies.forEach((_, si) => {
+      const on = si < currentStage;
+      const col = STAGE_COLOURS_CSS[si];
+      html += `<div class="prog-dot ${on ? 'on' : ''}" style="${on ? `background:${col}` : ''}"></div>`;
+    });
+    html += '</div>';
+    html += `<div class="skill-card-stage" style="color:${STAGE_COLOURS_CSS[currentStage-1]}">Stage ${currentStage}</div>`;
+    html += `<h3>${card.title}</h3>`;
+    html += `<p>${card.bodies[currentStage - 1]}</p>`;
+    html += '</div>';
+  });
+  html += '</div>';
+
+  const container = document.getElementById('skillPanels');
+  let existing = document.getElementById('sp-' + key);
+  if (!existing) {
+    const div = document.createElement('div');
+    div.className = 'skill-panel';
+    div.id = 'sp-' + key;
+    container.appendChild(div);
+    existing = div;
+  }
+  existing.innerHTML = html;
+  container.querySelectorAll('.skill-panel').forEach(p => p.classList.remove('active'));
+  existing.classList.add('active');
+}
+
+function renderActiveSkillPanel() {
+  // clear cached panels so they rebuild with new stage
+  document.getElementById('skillPanels').innerHTML = '';
+  renderSkillPanel(activeSkillKey);
+}
+
+function switchSkill(key, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSkillPanel(key);
+}
+
+// ════════════════════════════════════════════
+// CHECKLISTS
+// ════════════════════════════════════════════
+function renderChecklists() {
+  const lists = CHECKLISTS[currentStage];
+  let html = '';
+  lists.forEach((cl, ci) => {
+    const total = cl.items.length;
+    const done = cl.items.filter((_, ii) => checkState[`${currentStage}-${ci}-${ii}`]).length;
+    const pct = Math.round((done / total) * 100);
+    const items = cl.items.map((item, ii) => {
+      const isDone = !!checkState[`${currentStage}-${ci}-${ii}`];
+      return `<div class="checklist-item${isDone ? ' checked' : ''}" onclick="toggleCheck(this,${currentStage},${ci},${ii})">
+        <div class="check-box">✓</div><div class="check-text">${item}</div>
+      </div>`;
+    }).join('');
+    html += `<div class="checklist-card">
+      <h3>${cl.title}</h3><div class="checklist-subtitle">${cl.sub}</div>
+      ${items}
+      <div class="checklist-progress">
+        <div class="progress-bar"><div class="progress-fill" id="pf-${ci}" style="width:${pct}%"></div></div>
+        <div class="progress-label" id="pl-${ci}">${done} / ${total}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('checklistGrid').innerHTML = html;
+}
+
+function toggleCheck(el, stage, ci, ii) {
+  const key = `${stage}-${ci}-${ii}`;
+  checkState[key] = el.classList.toggle('checked');
+  const lists = CHECKLISTS[stage];
+  const total = lists[ci].items.length;
+  const done = lists[ci].items.filter((_, x) => checkState[`${stage}-${ci}-${x}`]).length;
+  const pct = Math.round((done / total) * 100);
+  const pf = document.getElementById('pf-' + ci);
+  const pl = document.getElementById('pl-' + ci);
+  if (pf) pf.style.width = pct + '%';
+  if (pl) pl.textContent = `${done} / ${total}`;
+}
+
+// ════════════════════════════════════════════
+// RUBRIC
+// ════════════════════════════════════════════
+function selectRubric(key, btn) {
+  document.querySelectorAll('.rubric-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rubricBody').innerHTML = RUBRICS[key]
+    .map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+}
+
+// ════════════════════════════════════════════
+// PHRASES
+// ════════════════════════════════════════════
+function renderPhrases() {
+  document.getElementById('phrasesGrid').innerHTML = PHRASES[currentStage].map(g => `
+    <div class="phrase-group">
+      <h3>${g.title}</h3>
+      ${g.phrases.map(p => `<div class="phrase-item" onclick="copyPhrase(this,'${p.replace(/'/g, "\\'")}')">
+        <div class="phrase-text">${p}</div><div class="phrase-copy">copy</div>
+      </div>`).join('')}
+    </div>`).join('');
+}
+
+function copyPhrase(el, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    el.querySelector('.phrase-copy').textContent = '✓';
+    showToast('Copied to clipboard');
+    setTimeout(() => { el.classList.remove('copied'); el.querySelector('.phrase-copy').textContent = 'copy'; }, 2000);
+  });
+}
+
+// ════════════════════════════════════════════
+// ACTIVITIES
+// ════════════════════════════════════════════
+function renderActivities() {
+  document.getElementById('activitiesGrid').innerHTML = ACTIVITIES[currentStage].map((a, i) => `
+    <div class="activity-card" onclick="openActivity(${currentStage},${i})">
+      <div class="activity-type">${a.type}</div>
+      <h3>${a.title}</h3>
+      <p>${a.body}</p>
+      <div class="activity-meta">${a.tags.map(t => `<span class="activity-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function openActivity(stage, idx) {
+  const a = ACTIVITIES[stage][idx];
+  document.getElementById('modalInner').innerHTML = `
+    <div class="modal-eyebrow">${a.type}</div>
+    <h2>${a.title}</h2>
+    <div class="modal-body">${a.modal}</div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════
+let timerDuration = 600, timerRemaining = 600, timerInterval = null, timerRunning = false;
+const CIRCUM = 2 * Math.PI * 44;
+
+function setTimer(s, btn) {
+  if (timerRunning) return;
+  document.querySelectorAll('.t-preset').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  timerDuration = s; timerRemaining = s;
+  updateTimerDisplay(); updateArc(1);
+}
+function timerToggle() {
+  if (timerRunning) {
+    clearInterval(timerInterval); timerRunning = false;
+    document.getElementById('timerStartBtn').textContent = 'Resume';
+    document.getElementById('timerLbl').textContent = 'Paused';
+  } else {
+    if (timerRemaining <= 0) { timerReset(); return; }
+    timerRunning = true;
+    document.getElementById('timerStartBtn').textContent = 'Pause';
+    document.getElementById('timerLbl').textContent = 'Running';
+    timerInterval = setInterval(() => {
+      timerRemaining--;
+      updateTimerDisplay(); updateArc(timerRemaining / timerDuration);
+      if (timerRemaining <= 0) {
+        clearInterval(timerInterval); timerRunning = false;
+        document.getElementById('timerStartBtn').textContent = 'Start';
+        document.getElementById('timerLbl').textContent = 'Done';
+        showToast('Time\'s up');
+      }
+    }, 1000);
+  }
+}
+function timerReset() {
+  clearInterval(timerInterval); timerRunning = false;
+  timerRemaining = timerDuration;
+  updateTimerDisplay(); updateArc(1);
+  document.getElementById('timerStartBtn').textContent = 'Start';
+  document.getElementById('timerLbl').textContent = 'Ready';
+}
+function updateTimerDisplay() {
+  const m = Math.floor(timerRemaining / 60), s = timerRemaining % 60;
+  document.getElementById('timerDisp').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+function updateArc(ratio) {
+  document.getElementById('arcProg').style.strokeDashoffset = CIRCUM * (1 - ratio);
+}
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ════════════════════════════════════════════
+// CANVAS BACKGROUND — geometric grid
+// ════════════════════════════════════════════
+(function () {
+  const c = document.getElementById('canvas-bg'), ctx = c.getContext('2d');
+  let pts = [];
+
+  function resize() {
+    c.width = innerWidth; c.height = innerHeight;
+    pts = [];
+    const cols = Math.ceil(c.width / 90) + 1;
+    const rows = Math.ceil(c.height / 90) + 1;
+    for (let r = 0; r < rows; r++) {
+      for (let col = 0; col < cols; col++) {
+        pts.push({
+          bx: col * 90, by: r * 90,
+          ox: (Math.random() - 0.5) * 28,
+          oy: (Math.random() - 0.5) * 28,
+          ph: Math.random() * Math.PI * 2,
+          sp: 0.0004 + Math.random() * 0.0004
+        });
+      }
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = 'rgba(180,200,220,0.06)';
+    ctx.lineWidth = 0.8;
+    const cols = Math.ceil(c.width / 90) + 1;
+    const rows = Math.ceil(c.height / 90) + 1;
+
+    for (let r = 0; r < rows - 1; r++) {
+      for (let col = 0; col < cols - 1; col++) {
+        const i = r * cols + col;
+        if (i >= pts.length) continue;
+        const p = pts[i];
+        const x = p.bx + p.ox * Math.sin(t * p.sp + p.ph);
+        const y = p.by + p.oy * Math.cos(t * p.sp + p.ph * 1.3);
+        // right neighbour
+        const pr = pts[i + 1];
+        if (pr) {
+          const xr = pr.bx + pr.ox * Math.sin(t * pr.sp + pr.ph);
+          const yr = pr.by + pr.oy * Math.cos(t * pr.sp + pr.ph * 1.3);
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(xr, yr); ctx.stroke();
+        }
+        // bottom neighbour
+        const pb = pts[i + cols];
+        if (pb) {
+          const xb = pb.bx + pb.ox * Math.sin(t * pb.sp + pb.ph);
+          const yb = pb.by + pb.oy * Math.cos(t * pb.sp + pb.ph * 1.3);
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(xb, yb); ctx.stroke();
+        }
+        // dot
+        ctx.beginPath();
+        ctx.arc(x, y, 0.9, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(200,210,230,0.18)';
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+
+// ════════════════════════════════════════════
+// REVEAL ON SCROLL
+// ════════════════════════════════════════════
+const revObs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+}), { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+buildFramework();
+renderSkillPanel('ideas');
+renderChecklists();
+selectRubric('s3', document.querySelector('.rubric-btn.active'));
+renderPhrases();
+renderActivities();
+updateTimerDisplay();
+updateArc(1);
+</script>
+</body>
+</html>
